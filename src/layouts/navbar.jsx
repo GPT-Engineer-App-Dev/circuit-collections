@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { CircleUser, Menu, Package2 } from "lucide-react";
+import { Menu, Package2 } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
-import { navItems } from "../App";
+import { navItems, userMenuItems } from "../App";
 
 const Layout = () => {
   return (
@@ -24,6 +24,7 @@ const Layout = () => {
       <main className="flex-grow overflow-auto">
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 };
@@ -35,7 +36,7 @@ const DesktopNav = () => (
       className="flex items-center gap-2 text-lg font-semibold md:text-base"
     >
       <Package2 className="h-6 w-6" />
-      <span className="sr-only">Acme Inc</span>
+      <span>ElectroShop</span>
     </NavItem>
     {navItems.map((item) => (
       <NavItem key={item.to} to={item.to}>
@@ -60,7 +61,7 @@ const MobileNav = () => (
           className="flex items-center gap-2 text-lg font-semibold"
         >
           <Package2 className="h-6 w-6" />
-          <span className="sr-only">Acme Inc</span>
+          <span>ElectroShop</span>
         </NavItem>
         {navItems.map((item) => (
           <NavItem key={item.to} to={item.to}>
@@ -73,22 +74,31 @@ const MobileNav = () => (
 );
 
 const UserMenu = () => (
-  <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button variant="secondary" size="icon" className="rounded-full">
-        <CircleUser className="h-5 w-5" />
-        <span className="sr-only">Toggle user menu</span>
+  <div className="flex items-center gap-4">
+    {userMenuItems.map((item) => (
+      <Button key={item.title} variant="ghost" size="icon">
+        {item.icon}
+        <span className="sr-only">{item.title}</span>
       </Button>
-    </DropdownMenuTrigger>
-    <DropdownMenuContent align="end">
-      <DropdownMenuLabel>My Account</DropdownMenuLabel>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem>Settings</DropdownMenuItem>
-      <DropdownMenuItem>Support</DropdownMenuItem>
-      <DropdownMenuSeparator />
-      <DropdownMenuItem>Logout</DropdownMenuItem>
-    </DropdownMenuContent>
-  </DropdownMenu>
+    ))}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="secondary" size="icon" className="rounded-full">
+          <span className="sr-only">Open user menu</span>
+          {userMenuItems.find((item) => item.title === "Account").icon}
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>Profile</DropdownMenuItem>
+        <DropdownMenuItem>Orders</DropdownMenuItem>
+        <DropdownMenuItem>Settings</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>Logout</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </div>
 );
 
 const NavItem = ({ to, children, className }) => (
@@ -106,6 +116,24 @@ const NavItem = ({ to, children, className }) => (
   >
     {children}
   </NavLink>
+);
+
+const Footer = () => (
+  <footer className="border-t bg-muted/40 py-6 md:py-0">
+    <div className="container flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+      <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+        © 2024 ElectroShop. All rights reserved.
+      </p>
+      <nav className="flex items-center space-x-4 text-sm font-medium text-muted-foreground">
+        <NavLink to="/privacy-policy" className="hover:underline">
+          Privacy Policy
+        </NavLink>
+        <NavLink to="/terms-of-service" className="hover:underline">
+          Terms of Service
+        </NavLink>
+      </nav>
+    </div>
+  </footer>
 );
 
 export default Layout;
